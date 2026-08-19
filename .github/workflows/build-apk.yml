@@ -1,0 +1,47 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build Debug APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'gradle'
+
+      - name: Grant Execute Permission for Gradlew
+        run: chmod +x gradlew
+
+      - name: Create empty .env if not present
+        run: |
+          touch .env
+          echo "# Build environment secrets" >> .env
+
+      - name: Build Debug APK with Gradle
+        run: ./gradlew assembleDebug --no-daemon
+
+      - name: Verify APK Generated
+        run: |
+          ls -la app/build/outputs/apk/debug/
+          stat -c "%s %n" app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Upload Debug APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: AnimeVideoAI-Debug-APK
+          path: app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 14

@@ -1,0 +1,6 @@
+{
+  "name": "AnimeVideo AI",
+  "description": "AnimeVideo AI – Real AI Anime Video Generator with Replicate Wan 2.1 inference, Hindi/English narration, and 9:16 vertical video export.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
