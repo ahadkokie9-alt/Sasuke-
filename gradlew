@@ -123,19 +123,11 @@ if [ "$cygwin" = "false" -a "$darwin" = "false" -a "$nonstop" = "false" ] ; then
     fi
 fi
 
-# Collect all arguments for the java command.
-declare -a args
-i=0
-for arg do
-    args[$i]="$arg"
-    i=$((i+1))
-done
-
-# If wrapper jar is not present, fall back to installed gradle or download
+# Fall back to installed gradle CLI if wrapper jar does not exist
 if [ ! -f "$CLASSPATH" ]; then
     if command -v gradle >/dev/null 2>&1; then
-        exec gradle "${args[@]}"
+        exec gradle "$@"
     fi
 fi
 
-exec "$JAVACMD" "-Dorg.gradle.appname=$APP_BASE_NAME" -classpath "$CLASSPATH" org.gradle.wrapper.GradleWrapperMain "${args[@]}"
+exec "$JAVACMD" "-Dorg.gradle.appname=$APP_BASE_NAME" -classpath "$CLASSPATH" org.gradle.wrapper.GradleWrapperMain "$@"
